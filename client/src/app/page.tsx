@@ -235,9 +235,66 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-black text-white py-10 text-center text-sm mt-10">
-        <p>&copy; {new Date().getFullYear()} IndianCab. All rights reserved.</p>
-      </footer>
+      <footer className="bg-gradient-to-br from-black via-gray-900 to-black text-white pt-16 pb-10 mt-20 px-6 md:px-16">
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    viewport={{ once: true }}
+    className="grid md:grid-cols-4 gap-10 text-sm"
+  >
+    {/* Brand & Description */}
+    <div>
+      <Image src="/logos/image.png" alt="IndianCab Logo" width={160} height={60} className="mb-4" />
+      <p className="text-gray-400">
+        IndianCab offers reliable, fast, and comfortable rides across the city. Trusted by thousands daily.
+      </p>
+    </div>
+
+    {/* Quick Links */}
+    <div>
+      <h4 className="text-yellow-400 font-bold mb-4">Quick Links</h4>
+      <ul className="space-y-2">
+        <li><Link href="#services" className="hover:text-yellow-300">Services</Link></li>
+        <li><Link href="#fleet" className="hover:text-yellow-300">Fleet</Link></li>
+        <li><Link href="#coverage" className="hover:text-yellow-300">Coverage</Link></li>
+        <li><Link href="#testimonials" className="hover:text-yellow-300">Testimonials</Link></li>
+        <li><Link href="#contact" className="hover:text-yellow-300">Contact</Link></li>
+      </ul>
+    </div>
+
+    {/* Contact Info */}
+    <div>
+      <h4 className="text-yellow-400 font-bold mb-4">Contact Us</h4>
+      <ul className="space-y-2 text-gray-400">
+        <li>Email: support@indiancab.com</li>
+        <li>Phone: +91 99999 99999</li>
+        <li>Office: 123 City Center, New Delhi</li>
+      </ul>
+    </div>
+
+    {/* Social Links */}
+    <div>
+      <h4 className="text-yellow-400 font-bold mb-4">Follow Us</h4>
+      <div className="flex space-x-4">
+        <a href="#" className="hover:scale-110 transition"><img src="/icons/facebook.svg" alt="Facebook" className="w-6 h-6" /></a>
+        <a href="#" className="hover:scale-110 transition"><img src="/icons/instagram.svg" alt="Instagram" className="w-6 h-6" /></a>
+        <a href="#" className="hover:scale-110 transition"><img src="/icons/twitter.svg" alt="Twitter" className="w-6 h-6" /></a>
+      </div>
+    </div>
+  </motion.div>
+
+  <motion.div
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    transition={{ delay: 0.3, duration: 0.5 }}
+    viewport={{ once: true }}
+    className="mt-10 border-t border-gray-700 pt-6 text-center text-gray-500 text-xs"
+  >
+    &copy; {new Date().getFullYear()} IndianCab. All rights reserved.
+  </motion.div>
+</footer>
+
     </main>
   );
 }
