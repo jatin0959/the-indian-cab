@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { CarTaxiFront, UserCheck, PhoneCall, MapPin, Menu, X } from 'lucide-react';
+import { CarTaxiFront, UserCheck, PhoneCall, MapPin, Menu, X, Facebook, Instagram, Twitter, Mail, Phone } from 'lucide-react';
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -266,20 +266,26 @@ export default function Home() {
     {/* Contact Info */}
     <div>
       <h4 className="text-yellow-400 font-bold mb-4">Contact Us</h4>
-      <ul className="space-y-2 text-gray-400">
-        <li>Email: support@indiancab.com</li>
-        <li>Phone: +91 99999 99999</li>
-        <li>Office: 123 City Center, New Delhi</li>
+      <ul className="space-y-3 text-gray-400">
+        <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> support@indiancab.com</li>
+        <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 99999 99999</li>
+        <li className="flex items-center gap-2"><MapPin className="w-4 h-4" /> 123 City Center, New Delhi</li>
       </ul>
     </div>
 
-    {/* Social Links */}
+    {/* Social Icons */}
     <div>
       <h4 className="text-yellow-400 font-bold mb-4">Follow Us</h4>
-      <div className="flex space-x-4">
-        <a href="#" className="hover:scale-110 transition"><img src="/icons/facebook.svg" alt="Facebook" className="w-6 h-6" /></a>
-        <a href="#" className="hover:scale-110 transition"><img src="/icons/instagram.svg" alt="Instagram" className="w-6 h-6" /></a>
-        <a href="#" className="hover:scale-110 transition"><img src="/icons/twitter.svg" alt="Twitter" className="w-6 h-6" /></a>
+      <div className="flex gap-4">
+        <a href="#" className="hover:text-yellow-400 transition-all">
+          <Facebook className="w-5 h-5" />
+        </a>
+        <a href="#" className="hover:text-yellow-400 transition-all">
+          <Instagram className="w-5 h-5" />
+        </a>
+        <a href="#" className="hover:text-yellow-400 transition-all">
+          <Twitter className="w-5 h-5" />
+        </a>
       </div>
     </div>
   </motion.div>
@@ -294,6 +300,7 @@ export default function Home() {
     &copy; {new Date().getFullYear()} IndianCab. All rights reserved.
   </motion.div>
 </footer>
+
 
     </main>
   );
