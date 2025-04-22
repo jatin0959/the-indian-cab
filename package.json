@@ -1,0 +1,17 @@
+{
+  "name": "blinkbeat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev --prefix client\" \"node server/index.js\""
+  },
+  "keywords": [],
+  "author": "Opam Technology",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "devDependencies": {},
+  "description": ""
+}
