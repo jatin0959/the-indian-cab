@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -8,7 +9,15 @@ import { CarTaxiFront, UserCheck, PhoneCall, MapPin, Menu, X, Facebook, Instagra
 import AboutSection from './component/aboutection';
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://embed.tawk.to/680b36420ba5311912fea8a8/1iplsntku";
+    script.async = true;
+    script.charset = "UTF-8";
+    script.setAttribute("crossorigin", "*");
+    document.body.appendChild(script);
+  }, []);
+  
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white font-sans">
 <header className="flex items-center justify-between px-6 md:px-10 py-5 shadow-xl backdrop-blur-md bg-black/80 sticky top-0 z-50 border-b border-gray-700">
@@ -47,7 +56,7 @@ export default function Home() {
 
       <a
         href="tel:+919999999999"
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-yellow-500 text-black px-5 py-3 rounded-full shadow-xl hover:bg-yellow-400 transition-transform transform hover:scale-105"
+        className="fixed bottom-6 left-6 z-50 flex items-center gap-3 bg-yellow-500 text-black px-5 py-3 rounded-full shadow-xl hover:bg-yellow-400 transition-transform transform hover:scale-105"
       >
         <PhoneCall className="w-5 h-5" />
         <span className="font-bold text-sm">Call Your Ride Buddy</span>
@@ -300,14 +309,12 @@ export default function Home() {
     </span>
   </div>
 </section>
-
-      
           <AboutSection/>
           <section id="contact" className="relative py-24 px-6 md:px-16 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-hidden">
   <motion.h2
     initial={{ opacity: 0, y: -20 }}
     whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
+    transition={{ duration: 0.6 }} 
     viewport={{ once: true }}
     className="text-3xl md:text-4xl font-bold text-center mb-12 text-yellow-400"
   >
