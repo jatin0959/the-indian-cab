@@ -457,12 +457,25 @@ const [popupMsg, setPopupMsg] = useState<string | null>(null);
     {/* Contact Info */}
     <div>
       <h4 className="text-yellow-400 font-bold mb-4">Contact Us</h4>
-      <ul className="space-y-3 text-gray-400">
-        <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> support@indiancab.com</li>
-        <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 96258 18187</li>
-        <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 96258 18188</li>
-        <li className="flex items-center gap-2"><MapPin className="w-10 h-10" /> IndianCab HQ, New Ashok Nagar, New Delhi, India 110096</li>
-      </ul>
+      <ul className="space-y-3 text-gray-400 break-words">
+  <li className="flex items-start gap-2">
+    <Mail className="w-4 h-4 mt-1" />
+    <span>support@indiancab.com</span>
+  </li>
+  <li className="flex items-center gap-2">
+    <Phone className="w-4 h-4" />
+    +91 96258 18187
+  </li>
+  <li className="flex items-center gap-2">
+    <Phone className="w-4 h-4" />
+    +91 96258 18188
+  </li>
+  <li className="flex items-start gap-2">
+    <MapPin className="w-4 h-4 mt-1" />
+    <span>IndianCab HQ, New Ashok Nagar, New Delhi, India 110096</span>
+  </li>
+</ul>
+
     </div>
 
     {/* Social Icons */}
