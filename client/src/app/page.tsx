@@ -9,6 +9,10 @@ import { CarTaxiFront, UserCheck, PhoneCall, MapPin, Menu, X, Facebook, Instagra
 import AboutSection from './component/aboutection';
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+const [popupMsg, setPopupMsg] = useState<string | null>(null);
+
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://embed.tawk.to/680b36420ba5311912fea8a8/1iplsntku";
@@ -17,6 +21,30 @@ export default function Home() {
     script.setAttribute("crossorigin", "*");
     document.body.appendChild(script);
   }, []);
+
+  
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+  
+    const res = await fetch('/api/book', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  
+    setLoading(false);
+    if (res.ok) {
+      setPopupMsg("🎉 Thank you for booking with IndianCab! We'll contact you shortly.");
+      e.currentTarget.reset();
+    } else {
+      setPopupMsg("❌ Oops! Something went wrong. Please try again.");
+    }
+  }
+  
   
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white font-sans">
@@ -27,11 +55,11 @@ export default function Home() {
 
   {/* Desktop Navigation */}
   <nav className="hidden md:flex space-x-6 lg:space-x-8 text-sm font-semibold tracking-wide">
-    <Link href="#book" className="hover:text-yellow-400 transition">Book Now</Link>
-    <Link href="#fleet" className="hover:text-yellow-400 transition">Fleet</Link>
-    <Link href="#testimonials" className="hover:text-yellow-400 transition">Testimonials</Link>
-    <Link href="#coverage" className="hover:text-yellow-400 transition">Coverage</Link>
-    <Link href="#contact" className="hover:text-yellow-400 transition">Contact</Link>
+    <Link href="/book" className="hover:text-yellow-400 transition">Book Now</Link>
+    <Link href="/fleet" className="hover:text-yellow-400 transition">Fleet</Link>
+    <Link href="/testimonials" className="hover:text-yellow-400 transition">Testimonials</Link>
+    <Link href="/coverage" className="hover:text-yellow-400 transition">Coverage</Link>
+    <Link href="/contact" className="hover:text-yellow-400 transition">Contact</Link>
   </nav>
 
   {/* Mobile Menu Button */}
@@ -45,22 +73,36 @@ export default function Home() {
 {/* Mobile Dropdown Menu */}
 {isMobileMenuOpen && (
   <div className="md:hidden bg-black/90 backdrop-blur-sm px-6 py-4 space-y-4 text-sm font-semibold tracking-wide text-white">
-    <Link href="book" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Book Now</Link>
-    <Link href="#fleet" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Fleet</Link>
-    <Link href="#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Testimonials</Link>
-    <Link href="#coverage" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Coverage</Link>
-    <Link href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Contact</Link>
+    <Link href="/book" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Book Now</Link>
+    <Link href="/fleet" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Fleet</Link>
+    <Link href="/testimonials" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Testimonials</Link>
+    <Link href="/coverage" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Coverage</Link>
+    <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-yellow-400">Contact</Link>
   </div>
 )}
 
+<a
+  href="https://wa.me/919625818187"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="group fixed bottom-20 left-6 z-50 flex items-center gap-3 bg-green-500 text-white px-5 py-3 rounded-full shadow-xl hover:bg-green-600 transition-transform transform hover:scale-105"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 fill-white" viewBox="0 0 32 32">
+    <path d="M16 0a16 16 0 0 0-13.879 24.193L0 32l8.086-2.114A15.96 15.96 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0Zm0 29.6a13.514 13.514 0 0 1-6.9-1.846l-.493-.293-4.814 1.258 1.274-4.684-.32-.512a13.533 13.533 0 1 1 11.253 6.077Zm7.339-9.856c-.4-.2-2.356-1.167-2.724-1.3-.368-.134-.637-.2-.906.2-.268.4-1.04 1.3-1.275 1.567-.234.267-.468.3-.868.1-.4-.2-1.688-.625-3.213-1.99-1.186-1.057-1.987-2.36-2.217-2.76-.233-.4-.025-.617.175-.817.18-.18.4-.468.6-.7.2-.233.267-.4.4-.667.133-.267.066-.5-.033-.7-.1-.2-.9-2.167-1.233-2.967-.325-.8-.65-.7-.868-.717h-.75c-.2 0-.518.067-.785.367s-1.03 1.004-1.03 2.434 1.053 2.823 1.199 3.017c.145.193 2.072 3.167 5.016 4.443.701.3 1.248.478 1.674.612.703.224 1.343.193 1.85.117.564-.084 1.73-.707 1.976-1.39.243-.682.243-1.267.17-1.39-.07-.123-.261-.194-.676-.393Z" />
+  </svg>
+  <span className="hidden group-hover:inline font-bold text-sm transition-opacity duration-300">Chat on WhatsApp</span>
+</a>
 
-      <a
-        href="tel:+919999999999"
-        className="fixed bottom-6 left-6 z-50 flex items-center gap-3 bg-yellow-500 text-black px-5 py-3 rounded-full shadow-xl hover:bg-yellow-400 transition-transform transform hover:scale-105"
-      >
-        <PhoneCall className="w-5 h-5" />
-        <span className="font-bold text-sm">Call Your Ride Buddy</span>
-      </a>
+
+
+<a
+  href="tel:+919625818188"
+  className="group fixed bottom-6 left-6 z-50 flex items-center gap-3 bg-yellow-500 text-black px-5 py-3 rounded-full shadow-xl hover:bg-yellow-400 transition-transform transform hover:scale-105"
+>
+  <PhoneCall className="w-5 h-5" />
+  <span className="hidden group-hover:inline font-bold text-sm transition-opacity duration-300">Call Your Ride Buddy</span>
+</a>
+
 
       <section className="relative h-[95vh] flex flex-col justify-center items-center text-center px-6 overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0">
@@ -111,98 +153,53 @@ export default function Home() {
         </div>
       </section>
       <section id="book" className="relative py-24 bg-black text-white px-6 md:px-16 overflow-hidden">
-  <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-30 z-0">
-    <source src="/ride-bg.mp4" type="video/mp4" />
-  </video>
-  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-yellow-800/60 z-0"></div>
+        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-30 z-0">
+          <source src="/ride-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-yellow-800/60 z-0"></div>
 
-  <div className="relative z-10 max-w-3xl mx-auto backdrop-blur-xl bg-white/10 p-10 rounded-3xl shadow-2xl border border-white/20">
-    <motion.h2
-      initial={{ opacity: 0, y: -20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-      className="text-3xl md:text-4xl font-bold text-center mb-10 text-yellow-400"
-    >
-      Book Your Ride
-    </motion.h2>
+        <div className="relative z-10 max-w-3xl mx-auto backdrop-blur-xl bg-white/10 p-10 rounded-3xl shadow-2xl border border-white/20">
+          <motion.h2
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-3xl md:text-4xl font-bold text-center mb-10 text-yellow-400"
+          >
+            Book Your Ride
+          </motion.h2>
 
-    <form className="grid gap-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="text" placeholder="Your Name" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" />
-        <input type="tel" placeholder="Phone Number" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" />
-      </div>
-
-      <input type="email" placeholder="Email Address" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" />
-      <input type="text" placeholder="Pickup Location" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" />
-      <input type="text" placeholder="Drop Location" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" />
-      <input type="datetime-local" className="p-4 rounded-md bg-white/80 text-black w-full" />
-
-      <div className="text-yellow-300 font-semibold mt-4">Select Cab Type</div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        {["Sedan", "SUV", "Luxury"].map((type, index) => (
-          <label key={index} className="cursor-pointer">
-            <input type="radio" name="cabType" value={type} className="hidden peer" />
-            <div className="peer-checked:bg-yellow-500 peer-checked:text-black bg-white/80 text-gray-800 text-center p-4 rounded-lg font-bold shadow hover:shadow-md transition duration-300">
-              {type}
+          <form onSubmit={handleSubmit} className="grid gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input name="name" type="text" placeholder="Your Name" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" required />
+              <input name="phone" type="tel" placeholder="Phone Number" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" required />
             </div>
-          </label>
-        ))}
-      </div>
+            <input name="email" type="email" placeholder="Email Address" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" required />
+            <input name="pickup" type="text" placeholder="Pickup Location" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" required />
+            <input name="drop" type="text" placeholder="Drop Location" className="p-4 rounded-md bg-white/80 text-black placeholder-gray-700 w-full" required />
+            <input name="datetime" type="datetime-local" className="p-4 rounded-md bg-white/80 text-black w-full" required />
 
-      <button className="mt-6 bg-yellow-500 hover:bg-yellow-600 p-4 rounded-md font-bold text-black text-lg shadow-md transition duration-300">
-        Get a Quote
-      </button>
-    </form>
-  </div>
-</section>
+            <div className="text-yellow-300 font-semibold mt-4">Select Cab Type</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {["Sedan", "SUV", "Luxury"].map((type, index) => (
+                <label key={index} className="cursor-pointer">
+                  <input name="cabType" type="radio" value={type} className="hidden peer" required />
+                  <div className="peer-checked:bg-yellow-500 peer-checked:text-black bg-white/80 text-gray-800 text-center p-4 rounded-lg font-bold shadow hover:shadow-md transition duration-300">
+                    {type}
+                  </div>
+                </label>
+              ))}
+            </div>
 
-
-<section id="services" className="relative py-24 px-6 md:px-16 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-hidden">
-  <motion.h2
-    initial={{ opacity: 0, y: -20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    viewport={{ once: true }}
-    className="text-3xl md:text-4xl font-bold text-center mb-14 text-yellow-400"
-  >
-    Why Choose IndianCab?
-  </motion.h2>
-
-  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-    {[
-      {
-        icon: <CarTaxiFront className="w-8 h-8" />,
-        title: "Instant Booking",
-        desc: "Book your cab in just a few clicks with our ultra-fast booking engine.",
-      },
-      {
-        icon: <UserCheck className="w-8 h-8" />,
-        title: "Verified Drivers",
-        desc: "Professional and background-verified drivers to ensure your safety.",
-      },
-      {
-        icon: <PhoneCall className="w-8 h-8" />,
-        title: "24/7 Support",
-        desc: "We’re here for you — always available, no matter the time.",
-      },
-    ].map((item, i) => (
-      <motion.div
-        key={i}
-        whileHover={{ scale: 1.05 }}
-        transition={{ type: "spring", stiffness: 300 }}
-        className="bg-gradient-to-br from-yellow-50 via-white to-yellow-100 hover:from-yellow-200 hover:to-white text-black p-8 rounded-3xl shadow-2xl hover:shadow-yellow-300/40 text-center transition-all duration-300"
-      >
-        <div className="flex items-center justify-center mb-4">
-          <div className="w-16 h-16 rounded-full bg-yellow-400 flex items-center justify-center shadow-lg transition-transform hover:rotate-6 hover:scale-105 text-black">
-            {item.icon}
-          </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-6 bg-yellow-500 hover:bg-yellow-600 p-4 rounded-md font-bold text-black text-lg shadow-md transition duration-300"
+            >
+              {loading ? 'Sending...' : 'Get a Quote'}
+            </button>
+          </form>
         </div>
-        <h3 className="text-xl font-bold text-yellow-600 mb-3">{item.title}</h3>
-        <p className="text-gray-700">{item.desc}</p>
-      </motion.div>
-    ))}
-  </div>
-</section>
+      </section>
 
 
 <section id="fleet" className="relative py-24 px-6 md:px-16 bg-gradient-to-br from-black via-gray-900 to-black text-white overflow-hidden">
@@ -332,13 +329,13 @@ export default function Home() {
     >
       <div>
         <h4 className="text-yellow-300 text-lg font-semibold mb-1">Head Office</h4>
-        <p className="text-gray-300">The Indian Cab, Transport Office, Prayagraj, Uttar Pradesh 211003</p>
+        <p className="text-gray-300">IndianCab HQ, New Ashok Nagar, New Delhi, India 110096</p>
       </div>
 
       <div>
         <h4 className="text-yellow-300 text-lg font-semibold mb-1">Phone</h4>
-        <p className="text-gray-300">+91 99999 99999</p>
-        <p className="text-gray-300">+91 88888 88888</p>
+        <p className="text-gray-300">+91 96258 18187</p>
+        <p className="text-gray-300">+91 96258 18188</p>
       </div>
 
       <div>
@@ -353,23 +350,23 @@ export default function Home() {
     </motion.div>
 
     {/* Google Maps Location */}
-    <motion.div
-      initial={{ opacity: 0, x: 30 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-      className="rounded-xl overflow-hidden shadow-2xl border border-yellow-400/20"
-    >
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14320.878240433936!2d81.83550804999999!3d25.4435154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398534b0627dd36d%3A0x2b265f58ea9e3e8a!2sTransport%20Office%2C%20Prayagraj%2C%20Uttar%20Pradesh%20211003!5e0!3m2!1sen!2sin!4v1713789200909!5m2!1sen!2sin"
-        width="100%"
-        height="350"
-        allowFullScreen={true}
-        loading="lazy"
-        style={{ border: 0 }}
-        className="w-full h-full"
-      ></iframe>
-    </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="rounded-xl overflow-hidden shadow-2xl border border-yellow-400/20"
+        >
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2243.7162988298835!2d77.273775!3d28.6677018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDQwJzAzLjciTiA3N8KwMTYnMzQuOSJF!5e0!3m2!1sen!2sin!4v1714581310112!5m2!1sen!2sin"
+            width="100%"
+            height="350"
+            allowFullScreen
+            loading="lazy"
+            style={{ border: 0 }}
+            className="w-full h-full"
+          ></iframe>
+        </motion.div>
   </div>
 </section>
 
@@ -452,6 +449,8 @@ export default function Home() {
         <li><Link href="#coverage" className="hover:text-yellow-300">Coverage</Link></li>
         <li><Link href="#testimonials" className="hover:text-yellow-300">Testimonials</Link></li>
         <li><Link href="#contact" className="hover:text-yellow-300">Contact</Link></li>
+        <li><Link href="/faq" className="hover:text-yellow-300">FAQs</Link></li>
+        <li><Link href="/faq" className="hover:text-yellow-300">Terms & Conditions</Link></li>
       </ul>
     </div>
 
@@ -460,8 +459,9 @@ export default function Home() {
       <h4 className="text-yellow-400 font-bold mb-4">Contact Us</h4>
       <ul className="space-y-3 text-gray-400">
         <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> support@indiancab.com</li>
-        <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 99999 99999</li>
-        <li className="flex items-center gap-2"><MapPin className="w-4 h-4" /> 123 City Center, New Delhi</li>
+        <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 96258 18187</li>
+        <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +91 96258 18188</li>
+        <li className="flex items-center gap-2"><MapPin className="w-10 h-10" /> IndianCab HQ, New Ashok Nagar, New Delhi, India 110096</li>
       </ul>
     </div>
 
@@ -492,6 +492,31 @@ export default function Home() {
     &copy; {new Date().getFullYear()} IndianCab. All rights reserved.
   </motion.div>
 </footer>
+
+{popupMsg && (
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0 }}
+    className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+    onClick={() => setPopupMsg(null)}
+  >
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="bg-white text-black p-6 rounded-2xl shadow-xl max-w-md w-full text-center"
+    >
+      <h3 className="text-xl font-semibold mb-3">Booking Status</h3>
+      <p className="text-gray-700">{popupMsg}</p>
+      <button
+        className="mt-6 bg-yellow-500 hover:bg-yellow-600 px-6 py-2 rounded-full font-semibold"
+        onClick={() => setPopupMsg(null)}
+      >
+        Okay
+      </button>
+    </div>
+  </motion.div>
+)}
+
 
 
     </main>
