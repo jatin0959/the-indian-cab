@@ -17,9 +17,9 @@ export default function Hero() {
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0, delay: 0.1 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             className="hero__subtitle"
           >
             IndianCab — smooth, safe and on‑time rides across New Delhi.
