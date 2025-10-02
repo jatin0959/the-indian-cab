@@ -7,7 +7,7 @@ import Fleet from './pages/Fleet'
 import Features from './pages/Features'
 import USP from './pages/USP'
 import Contact from './pages/Contact'
-import logo from './assets/logo.png'
+
 
 export default function App() {
   const { pathname } = useLocation()
@@ -44,7 +44,7 @@ export default function App() {
       <header className={`nav light ${scrolled ? 'nav--scrolled' : ''}`}>
         <div className="container nav__inner">
           <Link to="/" className="brand" aria-label="Home" onClick={() => setOpen(false)}>
-            <img src={logo} alt="IndianCab" className="brand__logo" />
+            <img src="/assets/logo.png" alt="IndianCab" className="brand__logo" />
           </Link>
 
           {/* Desktop nav */}
