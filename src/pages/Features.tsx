@@ -1,6 +1,5 @@
 // src/pages/Features.tsx
-import { useRef, useState } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { useState } from 'react'
 
 type Feature = { title: string; text: string; img: string }
 
@@ -16,60 +15,47 @@ export default function Features() {
 
   const [active, setActive] = useState(0)
 
-  const headRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: headRef, offset: ['start end', 'end start'] })
-  const underlineScale = useTransform(scrollYProgress, [0, 1], [0.2, 1])
-
   return (
     <section className="section fx-wrap">
       <div className="container">
-        <header className="section__head" ref={headRef}>
+        <header className="section__head">
           <h1>Features</h1>
           <p>Everything you expect from a modern cab service — made delightful.</p>
-          <motion.span className="fx-underline" style={{ scaleX: underlineScale }} />
+          <span className="fx-underline" />
         </header>
       </div>
 
       <div className="container fx-layout">
-        {/* Left: sticky showcase */}
-        <div className="fx-showcase">
+        {/* Left: ultra-light showcase with CSS cross-fade */}
+        <figure className="fx-showcase" aria-label={feats[active]?.title}>
           <div className="fx-frame">
-            {/* No blur/gradient overlays */}
-            <AnimatePresence mode="popLayout">
-              <motion.img
-                key={active}
-                src={feats[active]?.img}
-                alt={feats[active]?.title}
-                className="fx-img"
-                loading="lazy"
+            {/* Layered images; only the active one is opaque */}
+            {feats.map((f, i) => (
+              <img
+                key={f.img}
+                src={f.img}
+                alt={i === active ? f.title : ''}
+                className={`fx-img ${i === active ? 'is-active' : ''}`}
+                loading={i === active ? 'eager' : 'lazy'}
                 decoding="async"
                 width={1200}
                 height={900}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
               />
-            </AnimatePresence>
+            ))}
           </div>
-          <div className="fx-showcase__caption">
+          <figcaption className="fx-showcase__caption">
             <span className="dot" />
             <strong>{feats[active]?.title}</strong>
             <span className="muted"> — {feats[active]?.text}</span>
-          </div>
-        </div>
+          </figcaption>
+        </figure>
 
-        {/* Right: interactive feature cards */}
+        {/* Right: simple cards; no scroll/hover animations beyond CSS */}
         <div className="fx-cards">
           {feats.map((f, i) => (
-            <motion.article
+            <article
               key={f.title}
               className={`fx-card ${active === i ? 'is-active' : ''}`}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.4, delay: i * 0.04 }}
-              whileHover={{ y: -6 }}
               onMouseEnter={() => setActive(i)}
               onFocus={() => setActive(i)}
               tabIndex={0}
@@ -90,51 +76,41 @@ export default function Features() {
                 <h3>{f.title}</h3>
                 <p>{f.text}</p>
               </div>
-              <div className="fx-glow" aria-hidden />
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>
 
-      <div className="fx-spacer" aria-hidden />
-
       <style>{`
-        .fx-wrap {
-          position: relative;
-          background: var(--bg); /* removed radial tint */
-        }
+        .fx-wrap { background: var(--bg); }
 
         .fx-underline {
-          display: block;
-          height: 3px; width: 180px; margin: 14px auto 0;
+          display: block; height: 3px; width: 180px; margin: 14px auto 0;
           background: linear-gradient(90deg, var(--brand), var(--brand-2));
-          transform-origin: left center; border-radius: 4px;
+          border-radius: 4px;
         }
 
         .fx-layout {
           display: grid;
           grid-template-columns: 1.05fr 1.2fr;
           gap: 26px; align-items: start;
-          min-height: calc(100vh - 120px);
         }
 
-        /* Sticky showcase */
-        .fx-showcase { position: sticky; top: 96px; }
+        /* Showcase: NOT sticky (to avoid scroll jank) */
+        .fx-showcase { margin: 0; }
         .fx-frame {
-          position: relative;
-          border-radius: 16px;
-          overflow: hidden;
-          background: #fff;             /* plain, no tint */
-          border: 1px solid var(--border);
-          box-shadow: var(--shadow);
+          position: relative; border-radius: 16px; overflow: hidden;
+          background: #fff; border: 1px solid var(--border); box-shadow: var(--shadow);
           aspect-ratio: 16/12;
         }
         .fx-img {
-          width: 100%; height: 100%;
-          object-fit: cover; display: block;
-          filter: none !important;       /* ensure no filters apply */
-          mix-blend-mode: normal;        /* no blending */
+          position: absolute; inset: 0;
+          width: 100%; height: 100%; object-fit: cover; display: block;
+          opacity: 0; transition: opacity .35s ease;
+          will-change: opacity; /* safe, cheap */
+          filter: none !important; mix-blend-mode: normal;
         }
+        .fx-img.is-active { opacity: 1; }
 
         .fx-showcase__caption {
           margin-top: 10px; font-size: 0.98rem;
@@ -147,46 +123,38 @@ export default function Features() {
         }
         .fx-showcase__caption .muted { color: var(--muted); }
 
-        /* Cards list */
+        /* Cards */
         .fx-cards { display: grid; gap: 14px; }
         .fx-card {
-          position: relative; display: grid;
-          grid-template-columns: 90px 1fr; align-items: center; gap: 14px;
+          display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 14px;
           border-radius: 16px; background: var(--card);
           border: 1px solid var(--border); box-shadow: var(--shadow);
-          padding: 12px; isolation: isolate;
-          transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+          padding: 12px; outline: none;
+          transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
         }
+        .fx-card:hover, .fx-card:focus { transform: translateY(-3px); }
         .fx-card.is-active {
           border-color: rgba(245,180,0,0.45);
-          box-shadow: 0 12px 26px rgba(0,0,0,0.08), 0 0 0 4px rgba(245,180,0,0.08);
+          box-shadow: 0 8px 18px rgba(0,0,0,0.06), 0 0 0 4px rgba(245,180,0,0.05);
         }
 
         .fx-thumb {
           width: 90px; height: 70px; border-radius: 12px; overflow: hidden;
-          background: #fff;               /* no gradient */
-          border: 1px solid var(--border);
+          background: #fff; border: 1px solid var(--border);
         }
-        .fx-thumb img {
-          width: 100%; height: 100%; object-fit: cover; display: block;
-          filter: none !important; mix-blend-mode: normal;
-        }
+        .fx-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .fx-copy h3 { margin: 2px 0 4px 0; }
         .fx-copy p { margin: 0; color: var(--muted); }
 
-        .fx-glow {
-          position: absolute; inset: -30% -10% auto -10%; height: 60%;
-          background: radial-gradient(260px 120px at 20% 40%, rgba(245,180,0,0.18), rgba(255,214,102,0.0) 60%);
-          opacity: 0; transition: opacity .25s ease; pointer-events: none; z-index: -1;
-        }
-        .fx-card:hover .fx-glow { opacity: 1; }
-
-        .fx-spacer { height: 10vh; }
-
+        /* Responsive */
         @media (max-width: 1100px){
-          .fx-layout { grid-template-columns: 1fr; min-height: auto; }
-          .fx-showcase { position: relative; top: 0; }
+          .fx-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Optional: bring back sticky ONLY on big screens for a nicer feel without jank */
+        @media (min-width: 1280px){
+          .fx-showcase { position: sticky; top: 96px; }
         }
       `}</style>
     </section>

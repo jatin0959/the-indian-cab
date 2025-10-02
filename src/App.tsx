@@ -8,29 +8,40 @@ import Features from './pages/Features'
 import USP from './pages/USP'
 import Contact from './pages/Contact'
 
-
 export default function App() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo({ top: 0, left: 0 }) }, [pathname])
 
   const links = [
     { to: '/services', label: 'Services' },
-    { to: '/fleet', label: 'Fleet' },
+    { to: '/Cabs', label: 'Cabs' },
     { to: '/features', label: 'Features' },
-    { to: '/usp', label: 'USP' },
+    { to: '/Experience', label: 'Experience' },
     { to: '/contact', label: 'Contact' },
   ]
 
-  // Navbar state
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10)
+    const onScroll = () => setScrolled(window.scrollY > 6)
     onScroll()
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // lock body scroll when drawer is open
+  useEffect(() => {
+    const b = document.body
+    if (open) {
+      const prev = b.style.overflow
+      b.style.overflow = 'hidden'
+      return () => { b.style.overflow = prev }
+    }
+  }, [open])
+
+  // close drawer on route change
+  useEffect(() => { setOpen(false) }, [pathname])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
@@ -43,19 +54,18 @@ export default function App() {
       {/* Header */}
       <header className={`nav light ${scrolled ? 'nav--scrolled' : ''}`}>
         <div className="container nav__inner">
-          <Link to="/" className="brand" aria-label="Home" onClick={() => setOpen(false)}>
+          <Link to="/" className="brand" aria-label="Home">
             <img src="/assets/logo.png" alt="IndianCab" className="brand__logo" />
           </Link>
 
           {/* Desktop nav */}
-          <nav className="nav__links nav__links--desktop">
+          <nav className="nav__links nav__links--desktop" aria-label="Primary">
             {links.map(l => (
               <NavLink key={l.to} to={l.to} className={({isActive}) => isActive ? 'active' : ''}>
                 {l.label}
               </NavLink>
             ))}
-            {/* Use a vivid WA button for contrast on white */}
-            <a className="btn btn--wa" href="https://wa.me/919625818187" target="_blank" rel="noreferrer">
+            <a className="btn btn--wa nav__wa" href="https://wa.me/919625818187" target="_blank" rel="noreferrer">
               Book on WhatsApp
             </a>
           </nav>
@@ -65,6 +75,7 @@ export default function App() {
             className={`hamburger ${open ? 'is-open' : ''}`}
             aria-label="Toggle menu"
             aria-expanded={open}
+            aria-controls="mobile-drawer"
             onClick={() => setOpen(v => !v)}
           >
             <span /><span /><span />
@@ -72,16 +83,30 @@ export default function App() {
         </div>
 
         {/* Mobile drawer */}
-        <div className={`nav-drawer ${open ? 'is-open' : ''}`} onClick={() => setOpen(false)}>
+        <div
+          id="mobile-drawer"
+          className={`nav-drawer ${open ? 'is-open' : ''}`}
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setOpen(false)}
+        >
           <div className="nav-drawer__panel" onClick={e => e.stopPropagation()}>
-            {links.map(l => (
-              <NavLink key={l.to} to={l.to} onClick={() => setOpen(false)} className={({isActive}) => isActive ? 'active' : ''}>
-                {l.label}
-              </NavLink>
-            ))}
-            <a className="btn btn--wa" href="https://wa.me/919625818187" target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
-              Book on WhatsApp
-            </a>
+            <div className="drawer__head">
+              <Link to="/" className="brand" onClick={() => setOpen(false)}>
+                <img src="/assets/logo.png" alt="IndianCab" className="brand__logo" />
+              </Link>
+              <button className="drawer__close" aria-label="Close menu" onClick={() => setOpen(false)}>✕</button>
+            </div>
+            <nav className="drawer__links" aria-label="Mobile">
+              {links.map(l => (
+                <NavLink key={l.to} to={l.to} onClick={() => setOpen(false)} className={({isActive}) => isActive ? 'active' : ''}>
+                  {l.label}
+                </NavLink>
+              ))}
+              <a className="btn btn--wa" href="https://wa.me/919625818187" target="_blank" rel="noreferrer">
+                Book on WhatsApp
+              </a>
+            </nav>
           </div>
         </div>
       </header>
@@ -91,74 +116,123 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />
-          <Route path="/fleet" element={<Fleet />} />
+          <Route path="/Cabs" element={<Fleet />} />
           <Route path="/features" element={<Features />} />
-          <Route path="/usp" element={<USP />} />
+          <Route path="/Experience" element={<USP />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
 
-      {/* Upgraded footer: airy pre-footer + dark band */}
-      <footer className="site-footer">
-        {/* Pre-footer (blends with page) */}
-        <div className="footer__pre">
-          <div className="container footer__grid">
-            <div>
-              <div className="brand brand--footer">IndianCab</div>
-              <p>Reliable rides across New Delhi & beyond.</p>
-              <p className="muted">Mon–Sun: 6:00 AM – 11:00 PM</p>
-              <a className="btn btn--wa" href="https://wa.me/919625818187" target="_blank" rel="noreferrer">
-                Book on WhatsApp
-              </a>
-            </div>
-            <div>
-              <h4>Company</h4>
-              <ul>
-                <li><Link to="/services">Services</Link></li>
-                <li><Link to="/fleet">Fleet</Link></li>
-                <li><Link to="/features">Features</Link></li>
-                <li><Link to="/usp">USP</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4>Contact</h4>
-              <ul>
-                <li><Link to="/contact">New Ashok Nagar, New Delhi 110096</Link></li>
-                <li><a href="tel:+919625818187">+91 96258 18187</a></li>
-                <li><a href="tel:+919625818188">+91 96258 18188</a></li>
-                <li><a href="mailto:support@indiancab.com">support@indiancab.com</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4>Quick Links</h4>
-              <ul>
-                <li><a href="https://maps.google.com/maps?ll=28.667694,77.276361&z=15&t=m&hl=en&gl=IN&mapclient=embed" target="_blank" rel="noreferrer">Google Maps</a></li>
-                <li><a href="#">Terms</a></li>
-                <li><a href="#">Privacy</a></li>
-              </ul>
-            </div>
+      {/* Footer */}
+     {/* ===== Footer (Branded) ===== */}
+<footer className="ic-footer">
+  {/* Glow band + CTA */}
+  <section className="ic-footer__cta">
+    <div className="container ic-footer__cta-inner">
+      <div className="cta-copy">
+        <img src="/assets/logo.png" alt="IndianCab" className="cta-logo" />
+        <div>
+          <h3>Ready when you are.</h3>
+          <p>Fast, safe and on-time rides across The India.</p>
+        </div>
+      </div>
+      <div className="cta-actions">
+        <a
+          className="btn btn--wa btn--lg"
+          href="https://wa.me/919625818187"
+          target="_blank" rel="noreferrer"
+        >
+          Book on WhatsApp
+        </a>
+        <a className="btn btn--light btn--lg" href="tel:+919625818187">
+          Call +91 96258 18187
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* Main footer */}
+  <section className="ic-footer__main">
+    <div className="container ic-footer__grid">
+      {/* Brand column */}
+      <div className="col brand-col">
+        <div className="brand-line">
+          {/* <img src="/assets/logo.png" alt="IndianCab" className="brand-mark" /> */}
+          <div>
+            <div className="brand-name">The Indian Cab</div>
+            <div className="tagline">Reliable rides, every time.</div>
           </div>
         </div>
 
-        {/* Dark band (clearly footer) */}
-        <div className="footer__band">
-          <div className="container band__inner">
-            <span>© {new Date().getFullYear()} IndianCab</span>
-            <div className="socials">
-              <a href="#" aria-label="Twitter">X</a>
-              <a href="#" aria-label="Instagram">IG</a>
-              <a href="#" aria-label="Facebook">FB</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+        <ul className="meta">
+          <li><span>🕘</span> Mon–Sun: 6:00 AM – 11:00 PM</li>
+          <li><span>📍</span> New Ashok Nagar, New Delhi • 110096</li>
+        </ul>
 
-      {/* Floating WA quick action (optional, keep if you like) */}
+        {/* <div className="socials">
+          <a href="#" aria-label="Instagram" className="s-btn">IG</a>
+          <a href="#" aria-label="Facebook" className="s-btn">FB</a>
+          <a href="#" aria-label="Twitter/X" className="s-btn">X</a>
+        </div> */}
+      </div>
+
+      {/* Links */}
+      <div className="col">
+        <h4>Company</h4>
+        <ul className="links">
+          <li><Link to="/services">Services</Link></li>
+          <li><Link to="/Cabs">Cabs</Link></li>
+          <li><Link to="/features">Features</Link></li>
+          <li><Link to="/Experience">Experience</Link></li>
+        </ul>
+      </div>
+
+      <div className="col">
+        <h4>Contact</h4>
+        <ul className="links">
+          <li><a href="tel:+919625818187">+91 96258 18187</a></li>
+          <li><a href="tel:+919625818188">+91 96258 18188</a></li>
+          <li><a href="mailto:support@indiancab.com">support@indiancab.com</a></li>
+          <li>
+            <a
+              href="https://maps.google.com/maps?ll=28.667694,77.276361&z=15&t=m&hl=en&gl=IN&mapclient=embed"
+              target="_blank" rel="noreferrer"
+            >
+              Google Maps ↗
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div className="col">
+        <h4>Quick Links</h4>
+        <ul className="links">
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="https://wa.me/919625818187?text=Hi%20IndianCab%2C%20I%20need%20a%20cab%20from%20[Pickup]%20to%20[Drop]." target="_blank" rel="noreferrer">Send Pickup on WA</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* Copyright bar */}
+  <section className="ic-footer__tail">
+    <div className="container tail-inner">
+      <span>© {new Date().getFullYear()} The Indian Cab</span>
+      <span className="tiny">Designed & Developed by Jatin Dubey</span>
+    </div>
+  </section>
+</footer>
+
+
+      {/* Floating WhatsApp quick action */}
       <a
         className="whatsapp-fab"
         href="https://wa.me/919625818187?text=Hi%20IndianCab%20team,%20I%20want%20to%20book%20a%20cab."
         target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp"
-      >WhatsApp</a>
+      >
+        WhatsApp
+      </a>
     </div>
   )
 }
