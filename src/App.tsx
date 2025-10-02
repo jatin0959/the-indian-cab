@@ -7,6 +7,8 @@ import Fleet from './pages/Fleet'
 import Features from './pages/Features'
 import USP from './pages/USP'
 import Contact from './pages/Contact'
+import Welcome from './pages/Welcome'
+import WelcomeSplash from './components/WelcomeSplash'
 
 export default function App() {
   const { pathname } = useLocation()
@@ -22,6 +24,13 @@ export default function App() {
 
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+
+  // splash loader state
+  const [showSplash, setShowSplash] = useState(() => !localStorage.getItem('ic_seen_welcome'))
+  const handleSplashDone = () => {
+    localStorage.setItem('ic_seen_welcome', '1')
+    setShowSplash(false)
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 6)
@@ -51,6 +60,9 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      {/* Welcome Splash */}
+      {showSplash && <WelcomeSplash onDone={handleSplashDone} durationMs={5600} />}
+
       {/* Header */}
       <header className={`nav light ${scrolled ? 'nav--scrolled' : ''}`}>
         <div className="container nav__inner">
@@ -120,112 +132,85 @@ export default function App() {
           <Route path="/features" element={<Features />} />
           <Route path="/Experience" element={<USP />} />
           <Route path="/contact" element={<Contact />} />
+          {/* keep welcome route for testing */}
+          <Route path="/welcome" element={<Welcome />} />
         </Routes>
       </main>
 
       {/* Footer */}
-     {/* ===== Footer (Branded) ===== */}
-<footer className="ic-footer">
-  {/* Glow band + CTA */}
-  <section className="ic-footer__cta">
-    <div className="container ic-footer__cta-inner">
-      <div className="cta-copy">
-        <img src="/assets/logo.png" alt="IndianCab" className="cta-logo" />
-        <div>
-          <h3>Ready when you are.</h3>
-          <p>Fast, safe and on-time rides across The India.</p>
-        </div>
-      </div>
-      <div className="cta-actions">
-        <a
-          className="btn btn--wa btn--lg"
-          href="https://wa.me/919625818187"
-          target="_blank" rel="noreferrer"
-        >
-          Book on WhatsApp
-        </a>
-        <a className="btn btn--light btn--lg" href="tel:+919625818187">
-          Call +91 96258 18187
-        </a>
-      </div>
-    </div>
-  </section>
-
-  {/* Main footer */}
-  <section className="ic-footer__main">
-    <div className="container ic-footer__grid">
-      {/* Brand column */}
-      <div className="col brand-col">
-        <div className="brand-line">
-          {/* <img src="/assets/logo.png" alt="IndianCab" className="brand-mark" /> */}
-          <div>
-            <div className="brand-name">The Indian Cab</div>
-            <div className="tagline">Reliable rides, every time.</div>
+      <footer className="ic-footer">
+        <section className="ic-footer__cta">
+          <div className="container ic-footer__cta-inner">
+            <div className="cta-copy">
+              <img src="/assets/logo.png" alt="IndianCab" className="cta-logo" />
+              <div>
+                <h3>Ready when you are.</h3>
+                <p>Fast, safe and on-time rides across India.</p>
+              </div>
+            </div>
+            <div className="cta-actions">
+              <a className="btn btn--wa btn--lg" href="https://wa.me/919625818187" target="_blank" rel="noreferrer">
+                Book on WhatsApp
+              </a>
+              <a className="btn btn--light btn--lg" href="tel:+919625818187">
+                Call +91 96258 18187
+              </a>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <ul className="meta">
-          <li><span>🕘</span> Mon–Sun: 6:00 AM – 11:00 PM</li>
-          <li><span>📍</span> New Ashok Nagar, New Delhi • 110096</li>
-        </ul>
+        <section className="ic-footer__main">
+          <div className="container ic-footer__grid">
+            <div className="col brand-col">
+              <div className="brand-line">
+                <div>
+                  <div className="brand-name">The Indian Cab</div>
+                  <div className="tagline">Reliable rides, every time.</div>
+                </div>
+              </div>
+              <ul className="meta">
+                <li>🕘 Mon–Sun: 6:00 AM – 11:00 PM</li>
+                <li>📍 New Ashok Nagar, New Delhi • 110096</li>
+              </ul>
+            </div>
+            <div className="col">
+              <h4>Company</h4>
+              <ul className="links">
+                <li><Link to="/services">Services</Link></li>
+                <li><Link to="/Cabs">Cabs</Link></li>
+                <li><Link to="/features">Features</Link></li>
+                <li><Link to="/Experience">Experience</Link></li>
+              </ul>
+            </div>
+            <div className="col">
+              <h4>Contact</h4>
+              <ul className="links">
+                <li><a href="tel:+919625818187">+91 96258 18187</a></li>
+                <li><a href="tel:+919625818188">+91 96258 18188</a></li>
+                <li><a href="mailto:support@indiancab.com">support@indiancab.com</a></li>
+                <li><a href="https://maps.google.com/maps?ll=28.667694,77.276361&z=15&t=m&hl=en&gl=IN&mapclient=embed" target="_blank" rel="noreferrer">Google Maps ↗</a></li>
+              </ul>
+            </div>
+            <div className="col">
+              <h4>Quick Links</h4>
+              <ul className="links">
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="https://wa.me/919625818187?text=Hi%20IndianCab%2C%20I%20need%20a%20cab" target="_blank" rel="noreferrer">Send Pickup on WA</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
 
-        {/* <div className="socials">
-          <a href="#" aria-label="Instagram" className="s-btn">IG</a>
-          <a href="#" aria-label="Facebook" className="s-btn">FB</a>
-          <a href="#" aria-label="Twitter/X" className="s-btn">X</a>
-        </div> */}
-      </div>
+        <section className="ic-footer__tail">
+          <div className="container tail-inner">
+            <span>© {new Date().getFullYear()} The Indian Cab</span>
+            <span className="tiny">Designed & Developed by Jatin Dubey</span>
+          </div>
+        </section>
+      </footer>
 
-      {/* Links */}
-      <div className="col">
-        <h4>Company</h4>
-        <ul className="links">
-          <li><Link to="/services">Services</Link></li>
-          <li><Link to="/Cabs">Cabs</Link></li>
-          <li><Link to="/features">Features</Link></li>
-          <li><Link to="/Experience">Experience</Link></li>
-        </ul>
-      </div>
-
-      <div className="col">
-        <h4>Contact</h4>
-        <ul className="links">
-          <li><a href="tel:+919625818187">+91 96258 18187</a></li>
-          <li><a href="tel:+919625818188">+91 96258 18188</a></li>
-          <li><a href="mailto:support@indiancab.com">support@indiancab.com</a></li>
-          <li>
-            <a
-              href="https://maps.google.com/maps?ll=28.667694,77.276361&z=15&t=m&hl=en&gl=IN&mapclient=embed"
-              target="_blank" rel="noreferrer"
-            >
-              Google Maps ↗
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div className="col">
-        <h4>Quick Links</h4>
-        <ul className="links">
-          <li><a href="#">Terms</a></li>
-          <li><a href="#">Privacy</a></li>
-          <li><a href="https://wa.me/919625818187?text=Hi%20IndianCab%2C%20I%20need%20a%20cab%20from%20[Pickup]%20to%20[Drop]." target="_blank" rel="noreferrer">Send Pickup on WA</a></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  {/* Copyright bar */}
-  <section className="ic-footer__tail">
-    <div className="container tail-inner">
-      <span>© {new Date().getFullYear()} The Indian Cab</span>
-      <span className="tiny">Designed & Developed by Jatin Dubey</span>
-    </div>
-  </section>
-</footer>
-
-
-      {/* Floating WhatsApp quick action */}
+      {/* Floating WhatsApp FAB */}
       <a
         className="whatsapp-fab"
         href="https://wa.me/919625818187?text=Hi%20IndianCab%20team,%20I%20want%20to%20book%20a%20cab."
