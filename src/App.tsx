@@ -205,12 +205,24 @@ export default function App() {
           </div>
         </section>
 
-        <section className="ic-footer__tail">
-          <div className="container tail-inner">
-            <span>© {new Date().getFullYear()} The Indian Cab</span>
-            <span className="tiny">Designed & Developed by Jatin Dubey</span>
-          </div>
-        </section>
+<section className="ic-footer__tail">
+  <div className="container tail-inner">
+    <span>© {new Date().getFullYear()} The Indian Cab</span>
+    <span className="tiny">
+      Crafted with precision by{" "}
+      <a
+        href="https://wa.me/919004504998?text=Hi%20Jatin%2C%20I%20came%20across%20your%20work%20on%20The%20Indian%20Cab%20website."
+        target="_blank"
+        rel="noreferrer"
+        className="dev-signature"
+      >
+        Jatin Dubey
+      </a>
+    </span>
+  </div>
+</section>
+
+
       </footer>
 
       {/* Floating WhatsApp FAB */}

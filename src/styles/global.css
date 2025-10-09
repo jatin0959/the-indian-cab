@@ -412,3 +412,16 @@ main {
 
 /* Ensure the FAB doesn’t cover footer links */
 .whatsapp-fab { z-index: 70; }
+
+
+.ic-footer__tail .dev-signature {
+  color: #00a884; /* WhatsApp green accent */
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.ic-footer__tail .dev-signature:hover {
+  color: #128c7e; /* darker hover tone */
+  text-decoration: underline;
+}
