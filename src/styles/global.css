@@ -374,3 +374,41 @@ main { display:block; padding-top: 2px; } /* keep content from hiding under stic
 @media (max-width: 640px){
   .ic-footer__grid { grid-template-columns: 1fr; }
 }
+
+
+/* Make the app a proper flex column so the footer is reachable */
+.app-shell {
+  min-height: 100svh;     /* safe viewport for mobile address bars */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let content grow and guarantee room for the FAB */
+main {
+  flex: 1 1 auto;
+  min-height: 0;          /* avoid unexpected overflow on mobile */
+  padding-bottom: 72px;   /* keeps footer clear of the WhatsApp FAB */
+}
+
+/* Footer naturally sits at the bottom */
+.ic-footer {
+  margin-top: auto;
+}
+
+/* Drawer must not block the page when closed (you already have most of this) */
+.nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;   /* IMPORTANT */
+  transition: opacity .2s ease;
+}
+.nav-drawer.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  background-blend-mode:darken;
+}
+
+/* Ensure the FAB doesn’t cover footer links */
+.whatsapp-fab { z-index: 70; }

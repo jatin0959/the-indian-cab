@@ -9,6 +9,7 @@ import USP from './pages/USP'
 import Contact from './pages/Contact'
 import Welcome from './pages/Welcome'
 import WelcomeSplash from './components/WelcomeSplash'
+import Landing from './pages/landing'
 
 export default function App() {
   const { pathname } = useLocation()
@@ -134,6 +135,8 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           {/* keep welcome route for testing */}
           <Route path="/welcome" element={<Welcome />} />
+          <Route path="/cabs/:slug" element={<Landing type="cab" />} />
+  <Route path="/tours/:slug" element={<Landing type="tour" />} />
         </Routes>
       </main>
 
